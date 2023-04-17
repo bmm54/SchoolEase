@@ -111,12 +111,12 @@ class _CourState extends State<Cour> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 10), // add some top spacing
+            const SizedBox(height: 20), // add some top spacing
             _isTeacher
                 ? DottedBorder(
                     dashPattern: const [4, 4], // Set dash pattern
                     strokeWidth: 5, // Set border width
-                    color: Colors.black26, // Set border color
+                    color: Colors.black12, // Set border color
                     borderType: BorderType.RRect, // Set border type
                     radius: const Radius.circular(10),
                     padding: const EdgeInsets.all(0),
@@ -128,7 +128,7 @@ class _CourState extends State<Cour> {
                           selectFile();
                         },
                         style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.black26,
+                          foregroundColor: Colors.black12,
                           backgroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(

@@ -4,6 +4,7 @@ import 'package:se2/screens/home/pages/notifications.dart';
 import 'package:se2/ui/theme.dart';
 
 import 'navbar.dart';
+
 class Home extends StatelessWidget {
   Home({Key? key}) : super(key: key);
   @override
@@ -16,13 +17,16 @@ class Home extends StatelessWidget {
           iconTheme: IconThemeData(color: textColor1),
           backgroundColor: backg1,
           elevation: 0.0,
-          title: const Text("Home Page",
+          title: Text(
+            "Home Page",
             style: TextStyle(color: textColor1),
           ),
           centerTitle: true,
         ),
         drawer: NavBar(),
         body: const TabBarView(
+          //stop swiping
+          physics: NeverScrollableScrollPhysics(),
           children: [
             Scaffold(
               backgroundColor: backg2,
@@ -51,9 +55,12 @@ class Home extends StatelessWidget {
           child: const TabBar(
             unselectedLabelColor: Colors.black54,
             labelColor: mainColor,
-            labelStyle: TextStyle(fontSize: 10), // reduce font size of selected tab label
-            unselectedLabelStyle: TextStyle(fontSize: 10), // reduce font size of unselected tab label
+            labelStyle: TextStyle(
+                fontSize: 10), // reduce font size of selected tab label
+            unselectedLabelStyle: TextStyle(
+                fontSize: 10), // reduce font size of unselected tab label
             indicatorWeight: 1, // reduce height of selected tab indicator
+            indicatorPadding: EdgeInsets.all(5),
             tabs: [
               Tab(
                 icon: Icon(Icons.calendar_month),
@@ -63,10 +70,7 @@ class Home extends StatelessWidget {
                 icon: Icon(Icons.work),
                 text: 'Documents',
               ),
-              Tab(
-                  icon: Icon(Icons.question_answer),
-                  text: 'Messages'
-              ),
+              Tab(icon: Icon(Icons.question_answer), text: 'Messages'),
               Tab(
                 icon: Icon(Icons.notifications),
                 text: 'Notifications',
@@ -79,6 +83,7 @@ class Home extends StatelessWidget {
           ),
         ),
       ),
+      
     );
   }
 }
