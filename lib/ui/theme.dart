@@ -23,6 +23,7 @@ const inputDeco=InputDecoration(
   borderSide: BorderSide(color: input1, width: 2.0),
   borderRadius: BorderRadius.all(Radius.circular(10.0)),
   ),
+  floatingLabelStyle: TextStyle(color: textColor1),
 );
 //loading
 class Themes{

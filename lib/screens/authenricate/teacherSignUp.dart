@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:se2/ui/theme.dart';
 
 import 'package:flutter/material.dart';
 
@@ -36,9 +37,7 @@ class _TeacherSignupFormState extends State<TeacherSignupForm> {
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                  ),
+                  decoration: inputDeco.copyWith(labelText: 'Email',),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter your email';
@@ -49,9 +48,7 @@ class _TeacherSignupFormState extends State<TeacherSignupForm> {
                 TextFormField(
                   controller: _passwordController,
                   obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                  ),
+                  decoration: inputDeco.copyWith(labelText: 'Password',),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter your password';
@@ -61,9 +58,7 @@ class _TeacherSignupFormState extends State<TeacherSignupForm> {
                 ),
                 TextFormField(
                   controller: _nameController,
-                  decoration: InputDecoration(
-                    labelText: 'Name',
-                  ),
+                  decoration: inputDeco.copyWith(labelText: 'Name',),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter your name';
