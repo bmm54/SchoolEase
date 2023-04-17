@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "407447437020",
+    "project_id": "schoolease-ac2db",
+    "storage_bucket": "schoolease-ac2db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407447437020:android:9eaeabe968c630d3783e19",
+        "android_client_info": {
+          "package_name": "com.example.se2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "407447437020-itt83oan92a6k99uig3bl9l42iou932c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoo0BQR4O3YNuD5eQ6lQhJwMGGnTqsLAs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "407447437020-itt83oan92a6k99uig3bl9l42iou932c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
