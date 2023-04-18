@@ -22,18 +22,6 @@ class _SigninState extends State<Signin> {
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
       backgroundColor: backg2,
-      appBar: AppBar(
-        backgroundColor: backg1,
-        elevation: 0.0,
-        title: const Text("Sign in",style: TextStyle(color: mainColor,),),
-        actions: [
-          TextButton.icon(icon: Icon(Icons.person),
-            onPressed: () {
-            widget.toggleView();
-            },
-            label: Text('Register'),),
-        ],
-      ),
       body: Container(
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: Form(
@@ -75,6 +63,14 @@ class _SigninState extends State<Signin> {
                   backgroundColor: mainColor, // Background color
                 ),
               ),
+              SizedBox(height: 12,),
+              TextButton.icon(icon: Icon(Icons.person,color: mainColor,),
+                  onPressed: () {
+                  widget.toggleView();
+                  },
+                  label: Text('Create new account',style: TextStyle(color: mainColor),),
+                  
+                  ),
               SizedBox(height: 12,),
               Text(error,
                 style: TextStyle(color: Colors.red,fontSize: 14),
