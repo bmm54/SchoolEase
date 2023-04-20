@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:se2/screens/authenricate/choose.dart';
 import 'package:se2/screens/authenricate/register.dart';
-import 'package:se2/screens/authenricate/sign_in.dart';
+import 'package:se2/screens/authenricate/studentSignin.dart';
 import 'package:se2/screens/authenricate/teacherSignUp.dart';
 
 class Authenticate extends StatefulWidget {
@@ -24,7 +24,7 @@ class _AuthenticateState extends State<Authenticate> {
       return Choose(toggleView: toggleView);
     } else {
       //return Register(toggleView: toggleView);
-      return TeacherSignupForm(toggleView: toggleView);
+      return Register(toggleView: toggleView);
     }
   }
 }

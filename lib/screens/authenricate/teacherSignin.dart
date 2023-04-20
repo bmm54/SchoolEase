@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:se2/screens/authenricate/register.dart';
+import 'package:se2/screens/authenricate/teacherSignUp.dart';
 import 'package:se2/services/auth.dart';
 import 'package:se2/ui/loading.dart';
 import 'package:se2/ui/theme.dart';
-class Signin extends StatefulWidget {
-  final Function toggleView;
-  Signin({required this.toggleView});
+class SigninTeacher extends StatefulWidget {
   @override
-  State<Signin> createState() => _SigninState();
+  State<SigninTeacher> createState() => _SigninState();
 }
 
-class _SigninState extends State<Signin> {
+class _SigninState extends State<SigninTeacher> {
   final AuthService _auth = AuthService();
   final _formKey=GlobalKey<FormState>();
 
@@ -50,7 +50,7 @@ class _SigninState extends State<Signin> {
                 onPressed: () async{
                   if (_formKey.currentState!.validate()) {
                     setState(() => loading = true);
-                    dynamic result = await _auth.signInWithEmailAndPassword(email, password);
+                    dynamic result = await _auth.signInWithEmailAndPasswordTeacher(context,email, password);
                      if (result == null) {
                       setState(() {error = 'Could not sign in with those credentials';
                       loading = false;
@@ -66,7 +66,7 @@ class _SigninState extends State<Signin> {
               SizedBox(height: 12,),
               TextButton.icon(icon: Icon(Icons.person,color: mainColor,),
                   onPressed: () {
-                  widget.toggleView();
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>TeacherSignupForm()));
                   },
                   label: Text('Create new account',style: TextStyle(color: mainColor),),
                   

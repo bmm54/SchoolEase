@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:se2/services/database.dart';
+import 'package:se2/screens/authenricate/register.dart';
+import 'package:se2/screens/authenricate/studentSignup.dart';
+import 'package:se2/services/auth.dart';
 import 'package:se2/ui/loading.dart';
+import 'package:se2/ui/theme.dart';
 
-import '../../services/auth.dart';
-import '../../ui/theme.dart';
-
-class Register extends StatefulWidget {
-  final Function toggleView;
-  Register({required this.toggleView});
+class SigninStudent extends StatefulWidget {
   @override
-  State<Register> createState() => _RegisterState();
+  State<SigninStudent> createState() => _SigninStudentState();
 }
 
-class _RegisterState extends State<Register> {
+class _SigninStudentState extends State<SigninStudent> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+
   bool loading = false;
   //text field state
   String email = '';
@@ -26,25 +25,6 @@ class _RegisterState extends State<Register> {
         ? Loading()
         : Scaffold(
             backgroundColor: backg2,
-            appBar: AppBar(
-              backgroundColor: backg1,
-              elevation: 0.0,
-              title: const Text(
-                "Sign Up",
-                style: TextStyle(
-                  color: mainColor,
-                ),
-              ),
-              actions: [
-                TextButton.icon(
-                  icon: Icon(Icons.person),
-                  onPressed: () {
-                    widget.toggleView();
-                  },
-                  label: Text('Sign in'),
-                ),
-              ],
-            ),
             body: Container(
               padding:
                   const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
@@ -56,9 +36,8 @@ class _RegisterState extends State<Register> {
                       height: 20,
                     ),
                     TextFormField(
-                      //email;
                       decoration: inputDeco.copyWith(
-                        hintText: 'Email',
+                        labelText: 'Email',
                       ),
                       validator: (val) =>
                           val!.isEmpty ? 'Enter an email' : null,
@@ -70,9 +49,8 @@ class _RegisterState extends State<Register> {
                       height: 20,
                     ),
                     TextFormField(
-                      //password
                       decoration: inputDeco.copyWith(
-                        hintText: 'Password',
+                        labelText: 'Password',
                       ),
                       validator: (val) => val!.length < 6
                           ? 'Enter password longer then 6 chars'
@@ -89,37 +67,44 @@ class _RegisterState extends State<Register> {
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           setState(() => loading = true);
-                          dynamic result = await _auth.registerWithEmailAndPassword(email,password);
+                          dynamic result = await _auth
+                              .signInWithEmailAndPassword(email, password);
                           if (result == null) {
                             setState(() {
-                              error = 'Please supply a valid email';
+                              error =
+                                  'Could not sign in with those credentials';
                               loading = false;
                             });
                           }
                         }
-                        /*if (_formKey.currentState.validate()) {
-                      setState(() => loading = true);
-                      dynamic result = await _auth.registerWithEmailAndPassword(email, password).then((val) {
-                        Map<String, String> userInfoMap = {
-                          "name": name,
-                          "email": email,
-                        };
-                        databaseService.uploadUserInfo(userInfoMap);
-                      });
-                      if (result == null) {
-                        setState(() {
-                          error = 'please suply a valid email';
-                            loading = false;
-                        });
-                      }
-                    }*/
                       },
                       child: Text(
-                        'Register',
+                        'Sign in',
                         style: TextStyle(color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: mainColor, // Background color
+                      ),
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    TextButton.icon(
+                      icon: Icon(
+                        Icons.person,
+                        color: mainColor,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SignupStudent(),
+                          ),
+                        );
+                      },
+                      label: Text(
+                        'Create new account',
+                        style: TextStyle(color: mainColor),
                       ),
                     ),
                     SizedBox(
