@@ -128,6 +128,9 @@ class AuthService {
       return null;
     }
   }
+
+
+
   //sign out
   Future signOut(context) async {
     try {
