@@ -52,6 +52,8 @@ dependencies:
   path_provider: ^2.0.14
   go_router: ^6.5.7
   url_strategy: ^0.2.0
+  password_hash: ^2.0.0
+  rxdart: ^0.27.7
 
 dev_dependencies:
   flutter_test:

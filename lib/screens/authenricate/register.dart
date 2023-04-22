@@ -4,7 +4,7 @@ import 'package:se2/ui/loading.dart';
 
 import '../../services/auth.dart';
 import '../../ui/theme.dart';
-
+/*
 class Register extends StatefulWidget {
   final Function toggleView;
   Register({required this.toggleView});
@@ -89,7 +89,7 @@ class _RegisterState extends State<Register> {
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           setState(() => loading = true);
-                          dynamic result = await _auth.registerWithEmailAndPassword(email,password);
+                          dynamic result = await _auth.StudentSignUp(email,password);
                           if (result == null) {
                             setState(() {
                               error = 'Please supply a valid email';
@@ -136,3 +136,4 @@ class _RegisterState extends State<Register> {
           );
   }
 }
+*/

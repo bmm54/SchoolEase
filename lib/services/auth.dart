@@ -3,86 +3,115 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:se2/models/user.dart';
+import 'package:se2/screens/authenricate/choose.dart';
+import 'package:se2/screens/home/home.dart';
+import 'package:se2/screens/home/teacherHome.dart';
 import 'package:se2/services/database.dart';
-class AuthService{
-  final FirebaseAuth _auth=FirebaseAuth.instance;
+
+import '../screens/wrapper.dart';
+
+//i want to change it to AuthTeacher but that would cause alot of mess
+class AuthService {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool isTeacher = false;
+  String role="Student";
 
   String? getEmail() {
     final User? user = _auth.currentUser;
-    final uid = user?.uid;
     return user?.email;
   }
+
   //create user obj based on firebase user
-  Users? _userFromFirebaseUser(User? user){
-    if (user !=null) {
-      return Users(uid: user.uid);
+  Users? _userFromFirebaseUser(User? user) {
+    if (user != null) {
+      return Users(uid: user.uid, role: role);
     } else {
       return null;
     }
   }
+
   //auth change user stream
-  Stream<Users?> get user{
-    return _auth.authStateChanges()
-    .map(_userFromFirebaseUser);
+  Stream<Users?> get user {
+    return _auth.authStateChanges().map(_userFromFirebaseUser);
   }
-  //sign in annon
-  Future signInAnon() async{
-    try{
-      UserCredential result=await _auth.signInAnonymously();
-      User? user=result.user;
-      return _userFromFirebaseUser(user);
-    }catch(e){
+
+  Future TeahcerSignIn(
+      BuildContext context, String email, String password) async {
+    try {
+      UserCredential result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      User? user = result.user;
+      var collectionRef = FirebaseFirestore.instance.collection('teachers');
+      var query = collectionRef.where('email', isEqualTo: email).limit(1);
+      var querySnapshot = await query.get();
+      if (querySnapshot.docs.isNotEmpty) {
+        var documentSnapshot = querySnapshot.docs.first;
+        // Access the document data using documentSnapshot.data()
+        isTeacher = true;
+        role = "Teacher";
+      }
+
+      print(isTeacher);
+      if (isTeacher) {
+        Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TeacherHome(),
+        ),
+      );
+        return _userFromFirebaseUser(user);
+      } else {
+        throw("You do not have permission to access this app as a teacher.");
+      }
+    } catch (e) {
       print(e.toString());
       return null;
     }
   }
-  //sign in email and password
-  Future signInWithEmailAndPassword(String email,String password) async{
+
+  //register email and password
+  Future TeacherSignUp(String email, String password) async {
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      User? user = result.user;
+      await saveUser(user!);
+      isTeacher = true;
+      return _userFromFirebaseUser(user);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future<void> saveUser(User user) async {
+    await FirebaseFirestore.instance.collection('teachers').doc(user.uid).set({
+      'email': user.email,
+      'uid': user.uid,
+    });
+  }
+  /////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////Student////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////
+  Future StudentSignIn(context,String email,String password) async{
     try{
       UserCredential result=await _auth.signInWithEmailAndPassword(email: email, password: password);
       User? user=result.user;
+      role = "Student";
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Home(),
+        ),
+      );
       return _userFromFirebaseUser(user);
     }catch(e){
       print(e.toString());
       return null;
     }
   }
-    Future signInWithEmailAndPasswordTeacher(BuildContext context,String email,String password) async {
-  try{
-    UserCredential result=await _auth.signInWithEmailAndPassword(email: email, password: password);
-    User? user=result.user;
-    
-    List<QueryDocumentSnapshot<Map<String, dynamic>>> teachers = await getTeachers();
-    bool isTeacher = false;
-    for (var teacher in teachers) {
-      if (teacher.data()['email'] == email) {
-        isTeacher = true;
-        break;
-      }
-    }
-    print(isTeacher);
-    if (isTeacher) {
-      return _userFromFirebaseUser(user);
-    } else {
-      await _auth.signOut();
-      return null;
-    }
-  } catch(e){
-    print(e.toString());
-    return null;
-  }
-}
-
-  //function to get the teachers from the database
-  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getTeachers() async {
-  QuerySnapshot<Map<String, dynamic>> snapshot =
-      await FirebaseFirestore.instance.collection('teachers').get();
-  List<QueryDocumentSnapshot<Map<String, dynamic>>> teachers =
-      snapshot.docs.toList();
-  return teachers;
-}
   //register email and password
-  Future registerWithEmailAndPassword(String email,String password) async{
+  Future StudentSignUp(String email,String password) async{
     try{
       UserCredential result=await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User? user=result.user;
@@ -91,32 +120,20 @@ class AuthService{
       print(e.toString());
       return null;
     }
-  }
-  Future registerWithEmailAndPasswordTeacher(String email,String password) async{
-    try{
-      UserCredential result=await _auth.createUserWithEmailAndPassword(email: email, password: password);
-      User? user=result.user;
-      //await saveUser(user!);
-      return _userFromFirebaseUser(user);
-    }catch(e){
-      print(e.toString());
-      return null;
-    }
-  }
-  Future<void> saveUser(User user)async{
-    await FirebaseFirestore.instance.collection('teachers').doc(user.uid).set({
-        'email':user.email,
-        'uid':user.uid,
-      });
   }
   //sign out
-  Future signOut() async{
-    try{
+  Future signOut(context) async {
+    try {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Choose(),
+        ),
+      );
       return await _auth.signOut();
-    }catch(e){
+    } catch (e) {
       print(e.toString());
       return null;
     }
   }
-
 }

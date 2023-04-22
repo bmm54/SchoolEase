@@ -21,9 +21,18 @@ class NavBar extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 )),
             accountEmail: Text(userEmail,
-              style: TextStyle(
-              color: textColor2,),
-            ),
+                style: TextStyle(
+                  color: textColor2,
+                )),
+            otherAccountsPictures: [
+              CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Icon(
+                  Icons.verified,
+                  color: Colors.blue,
+                ),
+              ),
+            ],
             currentAccountPicture: CircleAvatar(
               backgroundColor: backg1,
               child: ClipRect(
@@ -38,14 +47,15 @@ class NavBar extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: backg1,
-          ),),
+            ),
+          ),
           ListTile(
             textColor: textColor1,
             iconColor: textColor1,
             leading: Icon(Icons.exit_to_app),
             title: Text("Logout"),
-            onTap: () async{
-              await _auth.signOut();
+            onTap: () async {
+              await _auth.signOut(context);
             },
           ),
         ],

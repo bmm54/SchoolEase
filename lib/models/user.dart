@@ -1,7 +1,9 @@
 class Users {
   final String uid;
-  Users({required this.uid});
+  final String role;
+  Users({required this.uid, required this.role});
 }
+
 class CustomUser {
   final String uid;
 
@@ -14,6 +16,7 @@ class UserData {
 
   UserData({required this.uid, required this.name});
 }
+
 class Username {
   final String name;
 

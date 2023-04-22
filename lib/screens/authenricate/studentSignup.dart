@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:se2/services/auth.dart';
+import 'package:se2/ui/theme.dart';
 
 class SignupStudent extends StatefulWidget {
-
   @override
   _SignupStudentState createState() => _SignupStudentState();
 }
 
 class _SignupStudentState extends State<SignupStudent> {
+  final _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -17,6 +19,7 @@ class _SignupStudentState extends State<SignupStudent> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width * 0.95;
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -109,10 +112,8 @@ class _SignupStudentState extends State<SignupStudent> {
                         }).toList();
                       },
                       icon: Icon(Icons.arrow_downward),
-                      iconSize: 
-                      24,
+                      iconSize: 24,
                       elevation: 16,
-
                       style: TextStyle(color: Colors.deepPurple),
                     );
                   },
@@ -122,13 +123,11 @@ class _SignupStudentState extends State<SignupStudent> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       try {
-                        await FirebaseAuth.instance
-                            .createUserWithEmailAndPassword(
-                          email: _emailController.text,
-                          password: _passwordController.text,
-                        );
+                        await _auth.StudentSignUp(
+                            _emailController.text, _passwordController.text);
+                        //fix this later
                         await FirebaseFirestore.instance
-                            .collection('teachers')
+                            .collection('classes')
                             .doc(FirebaseAuth.instance.currentUser!.uid)
                             .set({
                           'name': _nameController.text,
@@ -140,6 +139,13 @@ class _SignupStudentState extends State<SignupStudent> {
                       }
                     }
                   },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(screenWidth, 60),
+                    backgroundColor: mainColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
                   child: Text('Sign up'),
                 ),
                 SizedBox(height: 16.0),

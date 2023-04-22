@@ -19,6 +19,7 @@
 .swn
 *.lock
 
+
 # Android-specific
 **/android/**/gradle-wrapper.jar
 **/android/**/local.properties
@@ -67,3 +68,4 @@
 /.gradle
 /captures/
 *.lock
+firebase_options.dart

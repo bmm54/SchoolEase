@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:se2/screens/authenricate/register.dart';
 import 'package:se2/screens/authenricate/studentSignin.dart';
-import 'package:se2/screens/authenricate/teacherSignUp.dart';
 import 'package:se2/screens/authenricate/teacherSignin.dart';
 
 import '../../ui/theme.dart';
 
 class Choose extends StatefulWidget {
-  final Function toggleView;
-  Choose({required this.toggleView});
   @override
   State<Choose> createState() => _ChooseState();
 }
 
 class _ChooseState extends State<Choose> {
-  bool isTeacher = false;
-  dynamic text = "Teacher";
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width * 0.95;

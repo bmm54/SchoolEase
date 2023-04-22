@@ -4,6 +4,8 @@ import 'package:se2/screens/authenricate/register.dart';
 import 'package:se2/screens/authenricate/studentSignin.dart';
 import 'package:se2/screens/authenricate/teacherSignUp.dart';
 
+// i replace this page with choose.dart
+/*
 class Authenticate extends StatefulWidget {
   const Authenticate({Key? key}) : super(key: key);
 
@@ -24,7 +26,9 @@ class _AuthenticateState extends State<Authenticate> {
       return Choose(toggleView: toggleView);
     } else {
       //return Register(toggleView: toggleView);
+      //does not exist
       return Register(toggleView: toggleView);
     }
   }
 }
+*/

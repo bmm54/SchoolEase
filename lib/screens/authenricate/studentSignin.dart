@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:se2/screens/authenricate/register.dart';
 import 'package:se2/screens/authenricate/studentSignup.dart';
-import 'package:se2/services/auth.dart';
+import 'package:se2/screens/home/home.dart';
 import 'package:se2/ui/loading.dart';
 import 'package:se2/ui/theme.dart';
+
+import '../../services/auth.dart';
 
 class SigninStudent extends StatefulWidget {
   @override
@@ -11,7 +12,7 @@ class SigninStudent extends StatefulWidget {
 }
 
 class _SigninStudentState extends State<SigninStudent> {
-  final AuthService _auth = AuthService();
+  final _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
   bool loading = false;
@@ -21,6 +22,7 @@ class _SigninStudentState extends State<SigninStudent> {
   String error = '';
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width * 0.95;
     return loading
         ? Loading()
         : Scaffold(
@@ -67,8 +69,8 @@ class _SigninStudentState extends State<SigninStudent> {
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           setState(() => loading = true);
-                          dynamic result = await _auth
-                              .signInWithEmailAndPassword(email, password);
+                          dynamic result =
+                              await _auth.StudentSignIn(context,email, password);
                           if (result == null) {
                             setState(() {
                               error =
@@ -76,14 +78,23 @@ class _SigninStudentState extends State<SigninStudent> {
                               loading = false;
                             });
                           }
+                          //else if (result != null && _auth.isTeacher == false) {
+                          //  Navigator.push(
+                          //    context,
+                          //    MaterialPageRoute(
+                          //      builder: (context) => Home(),
+                          //    ),
+                          //  );
+                          //}
                         }
                       },
-                      child: Text(
-                        'Sign in',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      child: Text('Sign in'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: mainColor, // Background color
+                        minimumSize: Size(screenWidth, 60),
+                        backgroundColor: mainColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
                       ),
                     ),
                     SizedBox(
