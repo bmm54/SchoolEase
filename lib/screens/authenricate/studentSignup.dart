@@ -127,11 +127,12 @@ class _SignupStudentState extends State<SignupStudent> {
                             _emailController.text, _passwordController.text);
                         //fix this later
                         await FirebaseFirestore.instance
-                            .collection('classes')
+                            .collection('students')
                             .doc(FirebaseAuth.instance.currentUser!.uid)
                             .set({
+                          'email': _emailController.text,
                           'name': _nameController.text,
-                          'classes': _selectedClasses,
+                          'classe': _selectedClasses,
                         });
                         Navigator.of(context).pop();
                       } catch (e) {

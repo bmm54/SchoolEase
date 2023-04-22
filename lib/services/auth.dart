@@ -14,6 +14,7 @@ import '../screens/wrapper.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool isTeacher = false;
+  bool isStudent = false;
   String role="Student";
 
   String? getEmail() {
@@ -51,7 +52,7 @@ class AuthService {
         role = "Teacher";
       }
 
-      print(isTeacher);
+      print("Teacher: $isTeacher");
       if (isTeacher) {
         Navigator.push(
         context,
@@ -75,20 +76,12 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User? user = result.user;
-      await saveUser(user!);
       isTeacher = true;
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
       return null;
     }
-  }
-
-  Future<void> saveUser(User user) async {
-    await FirebaseFirestore.instance.collection('teachers').doc(user.uid).set({
-      'email': user.email,
-      'uid': user.uid,
-    });
   }
   /////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////Student////////////////////////////////////
@@ -97,15 +90,29 @@ class AuthService {
     try{
       UserCredential result=await _auth.signInWithEmailAndPassword(email: email, password: password);
       User? user=result.user;
-      role = "Student";
-      Navigator.push(
+      var collectionRef = FirebaseFirestore.instance.collection('students');
+      var query = collectionRef.where('email', isEqualTo: email).limit(1);
+      var querySnapshot = await query.get();
+      if (querySnapshot.docs.isNotEmpty) {
+        var documentSnapshot = querySnapshot.docs.first;
+        // Access the document data using documentSnapshot.data()
+        isStudent = true;
+        role = "Student";
+      }
+
+      print("student : $isStudent");
+      if (isStudent) {
+        Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => Home(),
         ),
       );
-      return _userFromFirebaseUser(user);
-    }catch(e){
+        return _userFromFirebaseUser(user);
+      } else {
+        throw("You do not have permission to access this app as a student.");
+      }
+    } catch (e) {
       print(e.toString());
       return null;
     }
