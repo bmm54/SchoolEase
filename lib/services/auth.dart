@@ -21,6 +21,10 @@ class AuthService {
     final User? user = _auth.currentUser;
     return user?.email;
   }
+  String? getUid() {
+    final User? user = _auth.currentUser;
+    return user?.uid;
+  }
 
   //create user obj based on firebase user
   Users? _userFromFirebaseUser(User? user) {

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:se2/screens/home/pages/tbas/doc/cour.dart';
 
+import '../../../services/auth.dart';
 import '../../../ui/theme.dart';
 
 class Documents extends StatefulWidget {
@@ -18,6 +19,8 @@ class Documents extends StatefulWidget {
 String? selectedClass;
 
 class _DocumentsState extends State<Documents> {
+  static final AuthService _auth = AuthService();
+  String currentUserUid = _auth.getUid()!;
   List<String> _selectedClasses = [];
   @override
   Widget build(BuildContext context) {
@@ -36,25 +39,29 @@ class _DocumentsState extends State<Documents> {
               color: backg1,
               child: Column(
                 children: [
-                  StreamBuilder<QuerySnapshot>(
+                  StreamBuilder<DocumentSnapshot>(
                     stream: FirebaseFirestore.instance
-                        .collection('classes')
+                        .collection('teachers')
+                        .doc(currentUserUid) // Assuming the current user's UID is stored in a variable called `currentUser.uid`
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
                         return Container();
                       }
                       List<DropdownMenuItem<String>> items = [];
-                      for (int i = 0; i < snapshot.data!.docs.length; i++) {
-                        final doc = snapshot.data!.docs[i];
+                      List<dynamic> classesList =
+                          snapshot.data!.get('classes');
+                      for (int i = 0; i < classesList.length; i++) {
+                        final className = classesList[i];
                         items.add(DropdownMenuItem(
-                          child: Text(doc['name']),
-                          value: doc.id,
+                          value: className,
+                          child: Text(className),
                         ));
                       }
                       return DropdownButtonFormField<String>(
+                        isExpanded: true,
                         decoration: dropDownDeco,
-                        value: selectedClass,
+                        value: null,
                         items: items,
                         onChanged: (String? selected) {
                           // Do something with the selected class
