@@ -53,7 +53,7 @@ class _CourState extends State<Cour> {
   @override
   void initState() {
     super.initState();
-    fetchDocuments('li2', 'cour');//change later
+    fetchDocuments('li1', 'cour');//change later
     Timer.periodic(Duration(seconds: 5), (timer) {
       _refreshDocuments();
     });

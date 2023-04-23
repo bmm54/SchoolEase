@@ -104,13 +104,13 @@ class _TeacherSignupFormState extends State<TeacherSignupForm> {
                                       return CheckboxListTile(
                                         title: Text(doc['name']),
                                         value:
-                                            _selectedClasses.contains(doc.id),
+                                            _selectedClasses.contains(doc['name']),
                                         onChanged: (value) {
                                           setState(() {
                                             if (value!) {
-                                              _selectedClasses.add(doc.id);
+                                              _selectedClasses.add(doc['name']);
                                             } else {
-                                              _selectedClasses.remove(doc.id);
+                                              _selectedClasses.remove(doc['name']);
                                             }
                                           });
                                         },

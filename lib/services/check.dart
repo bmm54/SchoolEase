@@ -3,15 +3,33 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 class Check {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   static Future<bool> isTeacher() async {
+    //check if current user is in teacher collection
     final User? user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
+    var collectionRef = FirebaseFirestore.instance.collection('teachers');
+    var query = collectionRef.where('email', isEqualTo: user?.email).limit(1);
+    var querySnapshot = await query.get();
+    if (querySnapshot.docs.isNotEmpty) {
+      var documentSnapshot = querySnapshot.docs.first;
+      // Access the document data using documentSnapshot.data()
+      return true;
+    } else {
       return false;
     }
-    final DocumentSnapshot doc = await FirebaseFirestore.instance
-        .collection('teachers')
-        .doc(user.uid)
-        .get();
-    return doc.exists;
+  }
+  static Future<bool> isStudent() async {
+    //check if current user is in teacher collection
+    final User? user = FirebaseAuth.instance.currentUser;
+    var collectionRef = FirebaseFirestore.instance.collection('students');
+    var query = collectionRef.where('email', isEqualTo: user?.email).limit(1);
+    var querySnapshot = await query.get();
+    if (querySnapshot.docs.isNotEmpty) {
+      var documentSnapshot = querySnapshot.docs.first;
+      // Access the document data using documentSnapshot.data()
+      return true;
+    } else {
+      return false;
+    }
   }
 }

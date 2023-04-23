@@ -21,7 +21,6 @@ String? selectedClass;
 class _DocumentsState extends State<Documents> {
   static final AuthService _auth = AuthService();
   String currentUserUid = _auth.getUid()!;
-  List<String> _selectedClasses = [];
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width * 0.95;

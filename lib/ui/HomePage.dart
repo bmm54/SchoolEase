@@ -1,32 +1,39 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:se2/models/user.dart';
+import 'package:se2/screens/home/home.dart';
+import 'package:se2/screens/home/teacherHome.dart';
+import 'package:se2/services/check.dart';
 
-import '../screens/home/home.dart';
-import '../screens/home/teacherHome.dart';
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class _HomePageState extends State<HomePage> {
+  bool _isTeacher = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkUserType();
+  }
+
+  void _checkUserType() async {
+    bool isTeacher = await Check.isTeacher();
+    setState(() {
+      _isTeacher = isTeacher;
+    });
+  }
+
+  Widget _buildTeacherHomePage() {
+    return TeacherHome();
+  }
+
+  Widget _buildStudentHomePage() {
+    return Home();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<Users?>(context);
-    if (user == null) {
-      // If user is not authenticated, show Authenticate widget
-      return Container(); // or show an error message
-    } else {
-      // Check if user is a teacher
-      if (user.role == 'Teacher') {
-        // If user is a teacher, show TeacherHome widget
-        return TeacherHome();
-      } else if (user.role == 'Student'){
-        // If user is not a teacher, show StudentHome widget
-        return Home();
-      }
-      else {
-        return Container();
-      }
-    }
+    return _isTeacher ? _buildTeacherHomePage() : _buildStudentHomePage();
   }
 }
