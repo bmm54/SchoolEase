@@ -111,7 +111,7 @@ class _SignupStudentState extends State<SignupStudent> {
                           return Text(doc['name']);
                         }).toList();
                       },
-                      icon: Icon(Icons.arrow_downward),
+                      icon: Icon(Icons.arrow_drop_down),
                       iconSize: 24,
                       elevation: 16,
                       style: TextStyle(color: Colors.deepPurple),

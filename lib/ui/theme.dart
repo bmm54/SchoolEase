@@ -25,6 +25,19 @@ const inputDeco = InputDecoration(
   ),
   floatingLabelStyle: TextStyle(color: textColor1),
 );
+const dropDownDeco = InputDecoration(
+  fillColor: backg1,
+  filled: true,
+  enabledBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: input1),
+    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: input1),
+    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+  ),
+  floatingLabelStyle: TextStyle(color: textColor1),
+);
 
 //loading
 class Themes {

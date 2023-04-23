@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:se2/models/user.dart';
@@ -16,13 +17,15 @@ class HomePage extends StatelessWidget {
       return Container(); // or show an error message
     } else {
       // Check if user is a teacher
-      bool isTeacher = user.role == 'Teacher';
-      if (isTeacher) {
+      if (user.role == 'Teacher') {
         // If user is a teacher, show TeacherHome widget
         return TeacherHome();
-      } else {
+      } else if (user.role == 'Student'){
         // If user is not a teacher, show StudentHome widget
         return Home();
+      }
+      else {
+        return Container();
       }
     }
   }

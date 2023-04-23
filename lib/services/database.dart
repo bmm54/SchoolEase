@@ -1,45 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
-import '../models/user.dart';
-/*
-class DatabaseService {
-
-  final String uid;
-  DatabaseService({required this.uid});
-
-  final CollectionReference userCollection = FirebaseFirestore.instance.collection('usernames');
-
-  Future updateUserData(String name) async {  // this is the function that has to edit the username
-    return await userCollection.doc(uid).set({
-      'name': name,
-    });
-  }
-
-  Future uploadUserInfo(userMap) async {  // this function adds username and email to firestore
-    return await userCollection.doc(uid).set(userMap);
-  }
-
-  List<Username> _usernameListFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.docs.map((doc) {
-      return Username(
-        name: doc.data()['name'] ?? '',
-      );
-    }).toList();
-  }
-
-  // userData from snapshot
-  UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
-    return UserData(
-      uid: uid,
-      name: snapshot.data()['name'],
-    );
-  }
-
-  Stream<List<Username>> get usernames {
-    return userCollection.snapshots().map(_usernameListFromSnapshot);
-  }
-
-  Stream<UserData> get userData {
-    return userCollection.doc(uid).snapshots().map(_userDataFromSnapshot);
-  }
-}*/
+class Storage {
+  //upload a document function to firebase storage
+  //takes in name of the class and create a folder className/documents/
+  //if its a cour document, it will be stored in className/documents/cour
+  //if its a tp document, it will be stored in className/documents/tp
+  //if its a td document, it will be stored in className/documents/td
+  ////fonction goes here
+  //Future uploadDocument(String className, String documentType, String fileName, String filePath) async {
+  //  final ref = FirebaseStorage.instance.ref().child('classes/$className/documents/$documentType/$fileName');
+  //  await ref.putFile(filePath);
+  //}
+}

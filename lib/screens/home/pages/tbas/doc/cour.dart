@@ -3,12 +3,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:se2/screens/home/pages/documents.dart';
 import 'package:se2/ui/theme.dart';
 import 'dart:async';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:path_provider/path_provider.dart';
 
 class Document {
   final String name;
@@ -29,9 +26,9 @@ class _CourState extends State<Cour> {
   UploadTask? uploadTask;
   List<Document> documents = [];
   // Add a function to fetch the documents' URLs from Firebase Storage
-  Future<void> fetchDocuments() async {
+  Future<void> fetchDocuments(String className, String documentType) async {
     final ListResult result =
-        await FirebaseStorage.instance.ref('documents/cour/').listAll();
+        await FirebaseStorage.instance.ref('classes/$className/documents/$documentType/').listAll();
     final urls = await Future.wait(
         result.items.map((ref) => ref.getDownloadURL()).toList());
     final names = result.items.map((ref) => ref.name).toList();
@@ -56,7 +53,7 @@ class _CourState extends State<Cour> {
   @override
   void initState() {
     super.initState();
-    fetchDocuments();
+    fetchDocuments('li2', 'cour');//change later
     Timer.periodic(Duration(seconds: 5), (timer) {
       _refreshDocuments();
     });
@@ -67,18 +64,19 @@ class _CourState extends State<Cour> {
     setState(() {});
   }
 
-  Future selectFile() async {
+  Future selectFile(String className, String documentType) async {
     FilePickerResult? result =
         await FilePicker.platform.pickFiles(allowMultiple: true);
     if (result == null) return;
     setState(() {
       pickedFile = result.files.first;
     });
-    await uploadFile();
+    await uploadFile(className, documentType);
   }
 
-  Future uploadFile() async {
-    final path = 'documents/cour/${pickedFile!.name}';
+  Future uploadFile(String className, String documentType) async {
+    final path =
+        'classes/$className/documents/$documentType/${pickedFile!.name}';
     final file = File(pickedFile!.path!);
     final ref = FirebaseStorage.instance.ref(path);
     uploadTask = ref.putFile(file);
@@ -100,10 +98,12 @@ class _CourState extends State<Cour> {
     //)) ;
   }
 
-  final _isTeacher = true;
-
   @override
   Widget build(BuildContext context) {
+    bool _isTeacher = true;
+    final _docType = Documents();
+    //get the selected class name
+    final className = _docType.getSelectedClass();
     final screenWidth = MediaQuery.of(context).size.width * 0.85;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -125,7 +125,8 @@ class _CourState extends State<Cour> {
                       height: 90, // set the desired height
                       child: ElevatedButton(
                         onPressed: () {
-                          selectFile();
+                          selectFile(className, 'cour');
+                          print(className);
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.black12,

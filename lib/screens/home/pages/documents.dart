@@ -1,10 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:se2/screens/home/pages/tbas/doc/cour.dart';
 
 import '../../../ui/theme.dart';
-class Documents extends StatelessWidget {
+
+class Documents extends StatefulWidget {
   const Documents({Key? key}) : super(key: key);
-  
+
+  @override
+  State<Documents> createState() => _DocumentsState();
+
+  getSelectedClass() {
+    return selectedClass;
+  }
+}
+
+String? selectedClass;
+
+class _DocumentsState extends State<Documents> {
+  List<String> _selectedClasses = [];
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width * 0.95;
@@ -14,41 +28,89 @@ class Documents extends StatelessWidget {
         length: 3,
         child: Column(
           children: <Widget>[
-           Container(
-            height: 70,
-            width:MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.only(top: 8,bottom: 20,left: 10,right: 10),
-            color: backg1,
-             child: Container(
-              padding: const EdgeInsets.all(3),
-              height: 40, //adjust the height as per your requirement
-              width: screenWidth,
-                     decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15), //adjust the border radius as per your requirement
-              border: Border.all(color: input1, width: 1),
-              color: Colors.white, //set your desired color
-                     ),
-                     child: const TabBar(
-                 indicator: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    //change the height
-           
-                    //make the text and the icon visible
-                    color: mainColor,
+            Container(
+              height: 150,
+              width: MediaQuery.of(context).size.width,
+              padding: const EdgeInsets.only(
+                  top: 10, bottom: 10, left: 10, right: 10),
+              color: backg1,
+              child: Column(
+                children: [
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('classes')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Container();
+                      }
+                      List<DropdownMenuItem<String>> items = [];
+                      for (int i = 0; i < snapshot.data!.docs.length; i++) {
+                        final doc = snapshot.data!.docs[i];
+                        items.add(DropdownMenuItem(
+                          child: Text(doc['name']),
+                          value: doc.id,
+                        ));
+                      }
+                      return DropdownButtonFormField<String>(
+                        decoration: dropDownDeco,
+                        value: selectedClass,
+                        items: items,
+                        onChanged: (String? selected) {
+                          // Do something with the selected class
+                          setState(() {
+                            selectedClass = selected;
+                            print(selectedClass);
+                          });
+                        },
+                        hint: Text('Select a class'),
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(3),
+                    height: 40, //adjust the height as per your requirement
+                    width: screenWidth,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                          15), //adjust the border radius as per your requirement
+                      border: Border.all(color: input1, width: 1),
+                      color: Colors.white, //set your desired color
                     ),
-                tabs: [
-                  Tab(text: "Cour",),
-                  Tab(text: "TP",),
-                  Tab(text: "TD",),
+                    child: const TabBar(
+                      indicator: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        //change the height
+
+                        //make the text and the icon visible
+                        color: mainColor,
+                      ),
+                      tabs: [
+                        Tab(
+                          text: "Cour",
+                        ),
+                        Tab(
+                          text: "TP",
+                        ),
+                        Tab(
+                          text: "TD",
+                        ),
+                      ],
+                      //style
+                      labelColor: Colors.white,
+                      unselectedLabelColor: textColor1,
+                      //backgroundcolor
+                      indicatorColor: mainColor,
+                      labelStyle:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 ],
-                //style
-                labelColor: Colors.white,
-                unselectedLabelColor: textColor1,
-                //backgroundcolor
-                indicatorColor: mainColor,
-                labelStyle: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
-              ),),
-           ),
+              ),
+            ),
             const Expanded(
               child: TabBarView(
                 children: <Widget>[
